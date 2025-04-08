@@ -28,22 +28,13 @@
             margin-bottom: 5px;
             display: block;
         }
-        input, select, button {
+        input, select {
             font-size: 16px;
             padding: 10px;
             width: 100%;
             margin-bottom: 15px;
             border: 1px solid #ddd;
             border-radius: 4px;
-        }
-        button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
         }
         .result {
             font-size: 22px;
@@ -83,9 +74,6 @@
             <!-- 옵션 동적으로 추가됨 -->
         </select>
 
-        <button onclick="calculateProfit()">계산하기</button>
-        <button onclick="resetFields()">리셋</button>
-
         <div id="result" class="result"></div>
     </div>
 
@@ -116,7 +104,6 @@
                 }
             }
 
-            // 첫 번째 옵션 선택
             exchangeRateSelect.selectedIndex = 0;
 
             // 무게 선택 추가 (0.5kg부터 30kg까지)
@@ -138,8 +125,7 @@
             const weight = parseFloat(weightSelect.value);
 
             if (isNaN(sellingPrice) || isNaN(localPrice) || isNaN(weight)) {
-                alert("모든 값을 올바르게 입력하세요.");
-                return;
+                return; // 모든 값이 제대로 입력되지 않으면 계산을 하지 않음
             }
 
             let localCost;
@@ -155,7 +141,7 @@
             const profit = sellingPrice * 0.95 - localCost - shippingCost - agencyFee;
 
             const result = document.getElementById("result");
-            result.textContent = `최종 순익: ${profit.toLocaleString()} 원`;
+            result.textContent = `최종 순익: ${Math.floor(profit).toLocaleString()} 원`; // 소수점 없애고 출력
             result.className = "result " + (profit >= 0 ? "red" : "blue");
         }
 
@@ -193,6 +179,18 @@
 
         // 국가 선택 시 환율 선택 옵션 업데이트
         countrySelect.addEventListener("change", updateOptions);
+
+        // 입력 값 변경 시 자동 계산
+        document.getElementById("sellingPrice").addEventListener("input", calculateProfit);
+        document.getElementById("localPrice").addEventListener("input", calculateProfit);
+        document.getElementById("weight").addEventListener("change", calculateProfit);
+
+        // 리셋 이벤트 (Esc 키)
+        window.addEventListener("keydown", function(event) {
+            if (event.key === "Escape") {
+                resetFields();
+            }
+        });
     </script>
 </body>
 </html>
