@@ -98,42 +98,36 @@
         function updateOptions() {
             const selectedCountry = countrySelect.value;
 
-  // 환율 값 업데이트
-function updateOptions() {
-    const selectedCountry = countrySelect.value;
+            // 환율 값 업데이트
+            exchangeRateSelect.innerHTML = "";  // 기존 옵션 삭제
+            if (selectedCountry === "독일") {
+                for (let i = 1450; i <= 1700; i += 10) {
+                    const option = document.createElement("option");
+                    option.value = i;
+                    option.textContent = i;
+                    exchangeRateSelect.appendChild(option);
+                }
+            } else if (selectedCountry === "영국") {
+                for (let i = 1650; i <= 2000; i += 10) {
+                    const option = document.createElement("option");
+                    option.value = i;
+                    option.textContent = i;
+                    exchangeRateSelect.appendChild(option);
+                }
+            }
 
-    // 환율 값 업데이트
-    exchangeRateSelect.innerHTML = "";  // 기존 옵션 삭제
-    if (selectedCountry === "독일") {
-        for (let i = 1450; i <= 1700; i += 10) {
-            const option = document.createElement("option");
-            option.value = i;  // 1450, 1460...와 같은 정수값으로 설정
-            option.textContent = i; // 1450, 1460...와 같은 정수값으로 표시
-            exchangeRateSelect.appendChild(option);
+            exchangeRateSelect.selectedIndex = 0;
+
+            // 무게 선택 추가 (0.5kg부터 30kg까지)
+            weightSelect.innerHTML = "";
+            for (let i = 1; i <= 60; i++) {
+                const option = document.createElement("option");
+                option.value = (i * 0.5).toFixed(1);
+                option.textContent = (i * 0.5).toFixed(1);
+                weightSelect.appendChild(option);
+            }
+            weightSelect.selectedIndex = 0;
         }
-    } else if (selectedCountry === "영국") {
-        for (let i = 1650; i <= 2000; i += 10) {
-            const option = document.createElement("option");
-            option.value = i;  // 1650, 1660...와 같은 정수값으로 설정
-            option.textContent = i; // 1650, 1660...와 같은 정수값으로 표시
-            exchangeRateSelect.appendChild(option);
-        }
-    }
-
-    // 첫 번째 옵션 선택
-    exchangeRateSelect.selectedIndex = 0;
-
-    // 무게 선택 추가 (0.5kg부터 30kg까지)
-    weightSelect.innerHTML = "";
-    for (let i = 1; i <= 60; i++) {
-        const option = document.createElement("option");
-        option.value = (i * 0.5).toFixed(1);
-        option.textContent = (i * 0.5).toFixed(1);
-        weightSelect.appendChild(option);
-    }
-    weightSelect.selectedIndex = 0;
-}
-
 
         // 계산 함수
         function calculateProfit() {
