@@ -75,6 +75,7 @@
         </select>
 
         <div id="result" class="result"></div>
+        <button onclick="resetFields()">리셋</button>
     </div>
 
     <script>
@@ -170,8 +171,8 @@
             document.getElementById("sellingPrice").value = "";
             document.getElementById("localPrice").value = "";
             document.getElementById("result").textContent = "";
-            countrySelect.value = "독일";
-            updateOptions();
+            // 국가 선택과 환율 선택은 그대로 유지
+            document.getElementById("sellingPrice").focus(); // 커서 "판매가 (원)"으로 이동
         }
 
         // 페이지 로드 시 옵션 업데이트
