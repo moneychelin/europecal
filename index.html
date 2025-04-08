@@ -116,6 +116,7 @@
                 }
             }
 
+            // 첫 번째 옵션 선택
             exchangeRateSelect.selectedIndex = 0;
 
             // 무게 선택 추가 (0.5kg부터 30kg까지)
@@ -189,6 +190,9 @@
 
         // 페이지 로드 시 옵션 업데이트
         window.onload = updateOptions;
+
+        // 국가 선택 시 환율 선택 옵션 업데이트
+        countrySelect.addEventListener("change", updateOptions);
     </script>
 </body>
 </html>
