@@ -52,11 +52,11 @@
             background-color: #0056b3;
         }
         .reset-button {
-            background-color: #dc3545;  /* 빨간색 배경 */
+            background-color: #dc3545;
             font-weight: bold;
         }
         .reset-button:hover {
-            background-color: #c82333; /* hover 시 색상 */
+            background-color: #c82333;
         }
         .result {
             font-size: 22px;
@@ -92,9 +92,7 @@
         <input type="number" id="localPrice" placeholder="숫자만 입력하세요" />
 
         <label for="weight">무게 (kg)</label>
-        <select id="weight">
-            <!-- 옵션 동적으로 추가됨 -->
-        </select>
+        <select id="weight"></select>
 
         <div id="result" class="result"></div>
         <button onclick="resetFields()">리셋</button>
@@ -105,12 +103,9 @@
         const exchangeRateSelect = document.getElementById("exchangeRate");
         const weightSelect = document.getElementById("weight");
 
-        // 환율 및 무게 선택 옵션 동적으로 추가
         function updateOptions() {
             const selectedCountry = countrySelect.value;
-
-            // 환율 값 업데이트
-            exchangeRateSelect.innerHTML = "";  // 기존 옵션 삭제
+            exchangeRateSelect.innerHTML = "";
             if (selectedCountry === "독일") {
                 for (let i = 1450; i <= 1700; i += 10) {
                     const option = document.createElement("option");
@@ -126,10 +121,8 @@
                     exchangeRateSelect.appendChild(option);
                 }
             }
-
             exchangeRateSelect.selectedIndex = 0;
 
-            // 무게 선택 추가 (0.5kg부터 30kg까지)
             weightSelect.innerHTML = "";
             for (let i = 1; i <= 60; i++) {
                 const option = document.createElement("option");
@@ -140,16 +133,13 @@
             weightSelect.selectedIndex = 0;
         }
 
-        // 계산 함수
         function calculateProfit() {
             const exchangeRate = parseFloat(exchangeRateSelect.value);
             const sellingPrice = parseFloat(document.getElementById("sellingPrice").value);
             const localPrice = parseFloat(document.getElementById("localPrice").value);
             const weight = parseFloat(weightSelect.value);
 
-            if (isNaN(sellingPrice) || isNaN(localPrice) || isNaN(weight)) {
-                return; // 모든 값이 제대로 입력되지 않으면 계산을 하지 않음
-            }
+            if (isNaN(sellingPrice) || isNaN(localPrice) || isNaN(weight)) return;
 
             let localCost;
             if (countrySelect.value === "독일") {
@@ -164,51 +154,52 @@
             const profit = sellingPrice * 0.95 - localCost - shippingCost - agencyFee;
 
             const result = document.getElementById("result");
-            result.textContent = `최종 순익: ${Math.floor(profit).toLocaleString()} 원`; // 소수점 없애고 출력
+            result.textContent = `최종 순익: ${Math.floor(profit).toLocaleString()} 원`;
             result.className = "result " + (profit >= 0 ? "red" : "blue");
         }
 
-        // 배송비 계산
         function getShippingCost(weight) {
-            const shippingRates = {
-                "독일": {
-                    0.5: 10130, 1.0: 12510, 1.5: 15760, 2.0: 17160, 3.0: 21040,
-                },
-                "영국": {
-                    0.5: 10230, 1.0: 12700, 1.5: 15180, 2.0: 17550, 3.0: 24250,
-                }
+            const germanyRates = {
+                0.5: 10130, 1.0: 12510, 1.5: 15760, 2.0: 17160, 2.5: 19150, 3.0: 21040,
+                3.5: 24100, 4.0: 26570, 4.5: 29050, 5.0: 31420, 6.0: 37530, 7.0: 42680,
+                8.0: 47910, 9.0: 53150, 10.0: 60430, 11.0: 67990, 12.0: 73420, 13.0: 78760,
+                14.0: 84190, 15.0: 89530, 16.0: 94960, 17.0: 100390, 18.0: 105730,
+                19.0: 111160, 20.0: 116590, 21.0: 123960, 22.0: 129390, 23.0: 134830,
+                24.0: 140160, 25.0: 145590, 26.0: 151990, 27.0: 157430, 28.0: 162760,
+                29.0: 168190, 30.0: 173630
             };
-            return shippingRates[countrySelect.value][weight] || 0;
+            const ukRates = {
+                0.5: 10230, 1.0: 12700, 1.5: 15180, 2.0: 17550, 2.5: 20900, 3.0: 24250,
+                3.5: 27540, 4.0: 30450, 4.5: 33560, 5.0: 36180, 6.0: 44420, 7.0: 50820,
+                8.0: 57320, 9.0: 63720, 10.0: 70710, 11.0: 79150, 12.0: 85740, 13.0: 92240,
+                14.0: 98740, 15.0: 105240, 16.0: 111740, 17.0: 118340, 18.0: 124830,
+                19.0: 131330, 20.0: 137830, 21.0: 146270, 22.0: 152870, 23.0: 159370,
+                24.0: 165870, 25.0: 172360, 26.0: 178860, 27.0: 185460, 28.0: 191960,
+                29.0: 198460, 30.0: 204960
+            };
+            const country = countrySelect.value;
+            const rateTable = country === "독일" ? germanyRates : ukRates;
+            return rateTable[weight] || 0;
         }
 
-        // 대행수수료 계산
         function getAgencyFee(localPrice) {
             if (localPrice <= 30) return 6000;
             if (localPrice <= 50) return 8000;
             return 10000;
         }
 
-        // 리셋 함수
         function resetFields() {
             document.getElementById("sellingPrice").value = "";
             document.getElementById("localPrice").value = "";
             document.getElementById("result").textContent = "";
-            // 국가 선택과 환율 선택은 그대로 유지
-            document.getElementById("sellingPrice").focus(); // 커서 "판매가 (원)"으로 이동
+            document.getElementById("sellingPrice").focus();
         }
 
-        // 페이지 로드 시 옵션 업데이트
         window.onload = updateOptions;
-
-        // 국가 선택 시 환율 선택 옵션 업데이트
         countrySelect.addEventListener("change", updateOptions);
-
-        // 입력 값 변경 시 자동 계산
         document.getElementById("sellingPrice").addEventListener("input", calculateProfit);
         document.getElementById("localPrice").addEventListener("input", calculateProfit);
         document.getElementById("weight").addEventListener("change", calculateProfit);
-
-        // 리셋 이벤트 (Esc 키)
         window.addEventListener("keydown", function(event) {
             if (event.key === "Escape") {
                 resetFields();
