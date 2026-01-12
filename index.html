@@ -107,14 +107,14 @@
             const selectedCountry = countrySelect.value;
             exchangeRateSelect.innerHTML = "";
             if (selectedCountry === "독일") {
-                for (let i = 1450; i <= 1700; i += 10) {
+                for (let i = 1450; i <= 1900; i += 10) {
                     const option = document.createElement("option");
                     option.value = i;
                     option.textContent = i;
                     exchangeRateSelect.appendChild(option);
                 }
             } else if (selectedCountry === "영국") {
-                for (let i = 1650; i <= 2000; i += 10) {
+                for (let i = 1650; i <= 2200; i += 10) {
                     const option = document.createElement("option");
                     option.value = i;
                     option.textContent = i;
@@ -214,3 +214,4 @@
     </script>
 </body>
 </html>
+
